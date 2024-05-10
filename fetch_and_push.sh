@@ -10,6 +10,14 @@ REMOTE="secondary"  # Set the git remote name from 'git remote -v'
 SEC_PASS="Think@123" # Secondary PC's authentication password
 LAST_SUCCESS=""
 
+# List of repositories
+declare -A repos=(
+["e30"]="ssh://git@bitbucket.rbbn.com:7999/em/e30.git"
+["ev-client"]="ssh://git@bitbucket.rbbn.com:7999/scc/ev-client.git"
+["traffic"]="ssh://git@bitbucket.rbbn.com:7999/em/traffic.git"
+["e2900dsp"]="ssh://git@bitbucket.rbbn.com:7999/ed/e2900dsp.git"
+)
+
 function last_success() {
     LAST_SUCCESS=$(sed -n "/Last successful fetch on/p" "$LOG_FILE" | cut -f 5- -d" ")
     if [ "$LAST_SUCCESS" = "" ]; then
@@ -42,7 +50,19 @@ function validate_execution() {
         exit
     fi
 }
-
+function clone_repo() {
+    REPO_PATH=$1
+    repo_name=$(basename "$REPO_PATH" .git)
+    REPO_URL=${repos[$repo_name]}
+    echo "Trying to clone $repo_name : $(date)"
+    if [ ! -d "${REPO_BASE_PATH}${repo_name}.git" ]; then
+        git clone --bare "$REPO_URL" "$REPO_PATH"
+        echo "git clone failed for $repo_name!"
+        exit
+    else
+        echo "Repository $repo_name already exists locally."
+    fi
+}
 # Fetches the latest changes from the remote repository for a given repository path and logs the results.
 #
 # Parameters:
@@ -55,8 +75,7 @@ function fetch_repo() {
     last_success > /dev/null 2>&1
     {
         # Go to repo
-        cd "$REPO_PATH"
-        validate_execution "Repo $REPO_PATH not found!"
+        cd "$REPO_PATH" || { echo "Error: $REPO_PATH not found. Trying to clone repo"; clone_repo "$REPO_PATH"; }
         # Fetch origin
         echo "Trying to fetch origin : $(date)"
         git fetch origin
