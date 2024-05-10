@@ -55,7 +55,7 @@ function fetch_repo() {
     last_success > /dev/null 2>&1
     {
         # Go to repo
-        cd "$REPO_PATH" || exit
+        cd "$REPO_PATH"
         validate_execution "Repo $REPO_PATH not found!"
         # Fetch origin
         echo "Trying to fetch origin : $(date)"
