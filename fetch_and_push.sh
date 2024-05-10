@@ -1,13 +1,11 @@
 #!/bin/bash
 
-REPO_PATH_E30="/home/akhil/git/pri_bare/e30.git" # Set the e30 repo path here
-LOG_FILE_E30="/home/akhil/logs/fetch_e30.log"   # Set the e30 log file location
-REPO_PATH_EVCLIENT="/home/akhil/git/pri_bare/ev-client.git"  # Set the ev-client repo path here
-LOG_FILE_EVCLIENT="/home/akhil/logs/fetch_evclient.log"    # Set the ev-client log file location
-REPO_PATH_TRAFFIC="/home/akhil/git/pri_bare/traffic.git"   # Set the traffic repo path here
-LOG_FILE_TRAFFIC="/home/akhil/logs/fetch_traffic.log"     # Set the traffic log file location
-REPO_PATH_2900DSP="/home/akhil/git/pri_bare/e2900dsp.git"   # Set the e2900dsp repo path here
-LOG_FILE_2900DSP="/home/akhil/logs/fetch_e2900dsp.log"     # Set the traffic log file location
+REPO_BASE_PATH="~/git/pri_bare/" # Set the base path of the repos
+LOG_FILE_PATH="~/logs/" # Set the directory to which log files needs to be stored
+REPO_PATH_E30="${REPO_BASE_PATH}e30.git" # Set the e30 repo path here
+REPO_PATH_EVCLIENT="${REPO_BASE_PATH}ev-client.git"  # Set the ev-client repo path here
+REPO_PATH_TRAFFIC="${REPO_BASE_PATH}traffic.git"   # Set the traffic repo path here
+REPO_PATH_2900DSP="${REPO_BASE_PATH}e2900dsp.git"   # Set the e2900dsp repo path here
 REMOTE="secondary"  # Set the git remote name from 'git remote -v'
 SEC_PASS="Think@123" # Secondary PC's authentication password
 LAST_SUCCESS=""
@@ -45,6 +43,11 @@ function validate_execution() {
     fi
 }
 
+# Fetches the latest changes from the remote repository for a given repository path and logs the results.
+#
+# Parameters:
+#   - REPO_PATH: The path to the repository.
+#   - LOG_FILE: The path to the log file.
 function fetch_repo() {
     REPO_PATH=$1
     LOG_FILE=$2
@@ -66,7 +69,21 @@ function fetch_repo() {
 }
 
 # Main
-fetch_repo "$REPO_PATH_E30" "$LOG_FILE_E30" &
-fetch_repo "$REPO_PATH_EVCLIENT" "$LOG_FILE_EVCLIENT" &
-fetch_repo "$REPO_PATH_TRAFFIC" "$LOG_FILE_TRAFFIC" &
-fetch_repo "$REPO_PATH_2900DSP" "$LOG_FILE_2900DSP" &
+# Check if the logs directory exists
+if [ ! -d "$LOG_FILE_PATH" ]; then
+  # Create the logs directory
+  mkdir -p "$LOG_FILE_PATH" || { echo "Error: Unable to create logs directory '$LOG_FILE_PATH'. Exiting." >&2; exit 1; }
+fi
+
+for REPO_PATH in "$REPO_PATH_E30" "$REPO_PATH_EVCLIENT" "$REPO_PATH_TRAFFIC" "$REPO_PATH_2900DSP"; do
+
+    # Extract the base name of the repository from REPO_PATH
+    BASE_REPO_NAME="${REPO_PATH//*\//}"
+    # Create the log file path
+    LOG_FILE="${LOG_FILE_PATH}${BASE_REPO_NAME}.log"
+    # Create the log file if it doesn't exist
+    touch "$LOG_FILE"
+
+    # Fetch the latest changes from the remote repository and log the results
+    fetch_repo "$REPO_PATH" "$LOG_FILE" &
+done
