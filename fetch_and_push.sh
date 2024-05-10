@@ -77,8 +77,6 @@ function verify_requirements() {
     if ! command -v sshpass > /dev/null; then
         echo 'sshpass is not installed, installing it...'
         sudo apt-get install -y sshpass
-    else
-        echo 'sshpass is already installed'
     fi
 }
 
@@ -103,7 +101,7 @@ function fetch_repo() {
         echo "Pushing changes to $REMOTE"
         sshpass -p "$SEC_PASS" git push "$REMOTE" -f --all
         validate_execution "git push failed!"
-    } >> "$LOG_FILE" 2>&1 &
+    } > "$LOG_FILE" 2>&1 &
 }
 
 # Main
