@@ -2,12 +2,15 @@
 
 REPO_BASE_PATH="${HOME}/git/pri_bare/" # Set the base path of the repos
 LOG_FILE_PATH="${HOME}/logs/" # Set the directory to which log files needs to be stored
-REPO_PATH_E30="${REPO_BASE_PATH}e30.git" # Set the e30 repo path here
-REPO_PATH_EVCLIENT="${REPO_BASE_PATH}ev-client.git"  # Set the ev-client repo path here
-REPO_PATH_TRAFFIC="${REPO_BASE_PATH}traffic.git"   # Set the traffic repo path here
-REPO_PATH_2900DSP="${REPO_BASE_PATH}e2900dsp.git"   # Set the e2900dsp repo path here
-REMOTE="secondary"  # Set the git remote name from 'git remote -v'
-SEC_PASS="Think@123" # Secondary PC's authentication password
+SEC_PASS="Think@123" # Secondary PC's(Fedora 20 Local git server) git user password
+
+#Change only the lines above
+
+REMOTE="secondary"  # Set the git remote name of the secondary repo from 'git remote -v'
+REPO_PATH_E30="${REPO_BASE_PATH}e30.git" 
+REPO_PATH_EVCLIENT="${REPO_BASE_PATH}ev-client.git" 
+REPO_PATH_TRAFFIC="${REPO_BASE_PATH}traffic.git"  
+REPO_PATH_2900DSP="${REPO_BASE_PATH}e2900dsp.git"
 LAST_SUCCESS=""
 
 # List of repositories
