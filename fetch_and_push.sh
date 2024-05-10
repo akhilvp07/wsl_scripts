@@ -65,6 +65,23 @@ function clone_repo() {
         echo "Repository $repo_name already exists locally."
     fi
 }
+
+function verify_requirements() {
+    # Check if the logs directory exists
+    if [ ! -d "$LOG_FILE_PATH" ]; then
+        # Create the logs directory
+        mkdir -p "$LOG_FILE_PATH" || { echo "Error: Unable to create logs directory '$LOG_FILE_PATH'. Exiting." >&2; exit 1; }
+    fi
+
+    # Check if sshpass is installed
+    if ! command -v sshpass > /dev/null; then
+        echo 'sshpass is not installed, installing it...'
+        sudo apt-get install -y sshpass
+    else
+        echo 'sshpass is already installed'
+    fi
+}
+
 # Fetches the latest changes from the remote repository for a given repository path and logs the results.
 #
 # Parameters:
@@ -90,11 +107,7 @@ function fetch_repo() {
 }
 
 # Main
-# Check if the logs directory exists
-if [ ! -d "$LOG_FILE_PATH" ]; then
-  # Create the logs directory
-  mkdir -p "$LOG_FILE_PATH" || { echo "Error: Unable to create logs directory '$LOG_FILE_PATH'. Exiting." >&2; exit 1; }
-fi
+verify_requirements
 
 for REPO_PATH in "$REPO_PATH_E30" "$REPO_PATH_EVCLIENT" "$REPO_PATH_TRAFFIC" "$REPO_PATH_2900DSP"; do
 
