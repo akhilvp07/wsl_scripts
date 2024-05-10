@@ -1,7 +1,7 @@
 #!/bin/bash
 
-REPO_BASE_PATH="~/git/pri_bare/" # Set the base path of the repos
-LOG_FILE_PATH="~/logs/" # Set the directory to which log files needs to be stored
+REPO_BASE_PATH="${HOME}/git/pri_bare/" # Set the base path of the repos
+LOG_FILE_PATH="${HOME}/logs/" # Set the directory to which log files needs to be stored
 REPO_PATH_E30="${REPO_BASE_PATH}e30.git" # Set the e30 repo path here
 REPO_PATH_EVCLIENT="${REPO_BASE_PATH}ev-client.git"  # Set the ev-client repo path here
 REPO_PATH_TRAFFIC="${REPO_BASE_PATH}traffic.git"   # Set the traffic repo path here
