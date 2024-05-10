@@ -54,10 +54,9 @@ function clone_repo() {
     REPO_PATH=$1
     repo_name=$(basename "$REPO_PATH" .git)
     REPO_URL=${repos[$repo_name]}
-    echo "Trying to clone $repo_name : $(date)"
+    echo "Use below command to clone $repo_name repo"
     if [ ! -d "${REPO_BASE_PATH}${repo_name}.git" ]; then
-        git clone --bare "$REPO_URL" "$REPO_PATH"
-        echo "git clone failed for $repo_name!"
+        echo "git clone --bare "$REPO_URL" "$REPO_PATH""
         exit
     else
         echo "Repository $repo_name already exists locally."
@@ -75,7 +74,7 @@ function fetch_repo() {
     last_success > /dev/null 2>&1
     {
         # Go to repo
-        cd "$REPO_PATH" || { echo "Error: $REPO_PATH not found. Trying to clone repo"; clone_repo "$REPO_PATH"; }
+        cd "$REPO_PATH" || { echo "Error: $REPO_PATH not found. Please clone the bare repo!"; clone_repo "$REPO_PATH"; exit; }
         # Fetch origin
         echo "Trying to fetch origin : $(date)"
         git fetch origin
