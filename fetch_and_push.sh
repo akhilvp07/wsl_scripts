@@ -101,7 +101,7 @@ function fetch_repo() {
         echo "Pushing changes to $REMOTE"
         sshpass -p "$SEC_PASS" git push "$REMOTE" -f --all
         validate_execution "git push failed!"
-    } >> "$LOG_FILE" 2>&1 &
+    } > "$LOG_FILE" 2>&1 &
 }
 
 # Main
