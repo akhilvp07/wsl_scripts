@@ -12,8 +12,11 @@ extract_directory_name() {
     fi
 }
 
+WINDOWS_DOWNLOAD_FOLDER="/mnt/c/Users/akhil.v.DC/Downloads/"
 LOCAL_BASE_PATH="/var/ftp/pub/"
 FTP_SERVER_BASE_PATH="ftp://10.1.1.41/pub/"
+REMOTE_SERVER="akhil@192.168.0.151"
+USER_PASS="Think@123"
 
 # Take image name input from user
 read -p "Enter image name: " image_name
@@ -21,5 +24,22 @@ read -p "Enter image name: " image_name
 # Extract directory name from image name
 directory_name=$(extract_directory_name "$image_name")
 
-# Download file from FTP server using wget
-wget -P "$LOCAL_BASE_PATH$directory_name" "$FTP_SERVER_BASE_PATH$directory_name/prerelease/$image_name"
+# Download file from FTP server using wget to Windows download folder
+if ! wget -P "$WINDOWS_DOWNLOAD_FOLDER" "$FTP_SERVER_BASE_PATH$directory_name/prerelease/$image_name"; then
+    echo "Failed to download the image from FTP server."
+    exit 1
+fi
+
+# SCP file from Windows download folder to remote server
+if ! sshpass -p $USER_PASS scp "$WINDOWS_DOWNLOAD_FOLDER$image_name" "$REMOTE_SERVER:/var/ftp/pub/$directory_name/"; then
+    echo "Failed to transfer the image to the remote server."
+    exit 1
+fi
+
+# Delete the Windows downloaded file
+if ! rm "$WINDOWS_DOWNLOAD_FOLDER$image_name"; then
+    echo "Failed to delete the downloaded file from the Windows download folder."
+    exit 1
+fi
+
+echo "Image successfully downloaded, transferred, and cleaned up."
