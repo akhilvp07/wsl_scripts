@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Function to extract directory name from image name
+extract_directory_name() {
+    image_name="$1"
+    # Extracting third field
+    platform=$(echo "$image_name" | cut -d '.' -f 3)
+    if [[ "$platform" =~ ^e[0-9]+[0-9]*$ ]]; then
+        echo "e_${platform:1}"
+    else
+        echo "$platform"
+    fi
+}
+
+LOCAL_BASE_PATH="/var/ftp/pub/"
+FTP_SERVER_BASE_PATH="ftp://10.1.1.41/pub/"
+
+# Take image name input from user
+read -p "Enter image name: " image_name
+
+# Extract directory name from image name
+directory_name=$(extract_directory_name "$image_name")
+
+# Download file from FTP server using wget
+wget -P "$LOCAL_BASE_PATH$directory_name" "$FTP_SERVER_BASE_PATH$directory_name/prerelease/$image_name"
