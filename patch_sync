@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Remote PC details
+REMOTE_USER="akhil"
+REMOTE_IP="192.168.0.151"
+REMOTE_PATH="/home/akhil/patches/"
+
+# Local path
+LOCAL_PATH="/home/akhil/patches/"
+
+# Step 1: Find and delete files in local folder that are older than 20 days
+find ${LOCAL_PATH} -type f -mtime +20 -delete && echo "Deleted files older than 20 days"
+
+# Step 2: Find and copy files from remote PC that were modified in the last 10 days
+ssh -o PubkeyAcceptedKeyTypes=ssh-rsa ${REMOTE_USER}@${REMOTE_IP} "find ${REMOTE_PATH} -type f -mtime -10 -print0" | \
+rsync -av --files-from=- --from0 ${REMOTE_USER}@${REMOTE_IP}:${REMOTE_PATH} ${LOCAL_PATH} 2>/dev/null
+
+if [ $? -ne 0 ]; then
+    echo "Error: Rsync failed while copying files from remote PC!"
+    exit 1
+fi
