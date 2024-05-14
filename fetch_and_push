@@ -31,16 +31,16 @@ function last_success() {
 function validate_fetch() {
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
-        echo "-------------------------------------------------------------------" >> "$LOG_FILE"
-        echo "Fetch origin failed!" >> "$LOG_FILE"
-        echo "Last successful fetch on $LAST_SUCCESS" >> "$LOG_FILE"
-        echo "-------------------------------------------------------------------" >> "$LOG_FILE"
+        echo "-------------------------------------------------------------------"
+        echo "Fetch origin failed!"
+        echo "Last successful fetch on $LAST_SUCCESS"
+        echo "-------------------------------------------------------------------"
         exit
     else
         LAST_SUCCESS=$(date)
-        echo "-------------------------------------------------------------------" >> "$LOG_FILE"
-        echo "Last successful fetch on $LAST_SUCCESS" >> "$LOG_FILE"
-        echo "-------------------------------------------------------------------" >> "$LOG_FILE"
+        echo "-------------------------------------------------------------------"
+        echo "Last successful fetch on $LAST_SUCCESS"
+        echo "-------------------------------------------------------------------"
     fi
 }
 
