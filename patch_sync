@@ -12,7 +12,7 @@ LOCAL_PATH="/home/akhil/patches/"
 find ${LOCAL_PATH} -type f -mtime +20 -delete && echo "Deleted files older than 20 days"
 
 # Step 2: Find and copy files from remote PC that were modified in the last 10 days
-ssh -o PubkeyAcceptedKeyTypes=ssh-rsa ${REMOTE_USER}@${REMOTE_IP} "find ${REMOTE_PATH} -type f -mtime -10 -print0" | \
+ssh -o PubkeyAcceptedKeyTypes=ssh-rsa ${REMOTE_USER}@${REMOTE_IP} "cd ${REMOTE_PATH} && find . -type f -mtime -10 -print0" | \
 rsync -av -e 'ssh -o PubkeyAcceptedKeyTypes=ssh-rsa' --files-from=- --from0 ${REMOTE_USER}@${REMOTE_IP}:${REMOTE_PATH} ${LOCAL_PATH} 2>rsync_error.log
 
 if [ $? -ne 0 ]; then
