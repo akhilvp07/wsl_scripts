@@ -93,9 +93,9 @@ function fetch_repo() {
     {
         # Go to repo
         cd "$REPO_PATH" || { echo "Error: $REPO_PATH not found. Please clone the bare repo!"; clone_repo "$REPO_PATH"; exit; }
-        # Fetch origin
+        # Fetch all branches from origin and force update the local branches
         echo "Trying to fetch origin : $(date)"
-        git fetch origin
+        git fetch origin '+refs/heads/*:refs/heads/*'
         validate_fetch
         # Force(-f) push to secondary repo configured as remote
         echo "Pushing changes to $REMOTE"
