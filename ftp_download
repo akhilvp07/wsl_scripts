@@ -6,7 +6,7 @@ extract_directory_name() {
     # Extracting third field
     platform=$(echo "$image_name" | cut -d '.' -f 3)
     if [[ "$platform" =~ ^e[0-9]+[0-9]*$ ]]; then
-        echo "e_${platform:1}"
+        echo "e_${platform:1:5}"
     else
         echo "$platform"
     fi
