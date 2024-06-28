@@ -13,13 +13,13 @@ extract_directory_name() {
 }
 
 WINDOWS_DOWNLOAD_FOLDER="/mnt/c/Users/akhil.v.DC/Downloads/"
-LOCAL_BASE_PATH="/var/ftp/pub/"
+
 FTP_SERVER_BASE_PATH="ftp://10.1.1.41/pub/"
 REMOTE_SERVER="akhil@192.168.0.151"
 USER_PASS="Think@123"
 
 # Take image name input from user
-read -p "Enter image name: " image_name
+read -r -p "Enter image name: " image_name
 
 # Extract directory name from image name
 directory_name=$(extract_directory_name "$image_name")
