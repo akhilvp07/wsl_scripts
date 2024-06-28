@@ -25,9 +25,11 @@ read -p "Enter image name: " image_name
 directory_name=$(extract_directory_name "$image_name")
 
 # Download file from FTP server using wget to Windows download folder
-if ! wget -P "$WINDOWS_DOWNLOAD_FOLDER" "$FTP_SERVER_BASE_PATH$directory_name/prerelease/$image_name"; then
-    echo "Failed to download the image from FTP server."
-    exit 1
+if ! wget -P "$WINDOWS_DOWNLOAD_FOLDER" "$FTP_SERVER_BASE_PATH$directory_name/$image_name"; then
+    if ! wget -P "$WINDOWS_DOWNLOAD_FOLDER" "$FTP_SERVER_BASE_PATH$directory_name/prerelease/$image_name"; then
+        echo "Failed to download the image from FTP server."
+        exit 1
+    fi
 fi
 
 # SCP file from Windows download folder to remote server
